@@ -1,0 +1,59 @@
+name: Build Windows x64
+
+on:
+  push:
+    branches: ["main"]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  windows-x64:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure
+        run: cmake -S . -B build -A x64
+
+      - name: Build
+        run: cmake --build build --config Release
+
+      - name: Smoke test
+        shell: pwsh
+        run: |
+          @"
+          uci
+          isready
+          position startpos
+          perft 4
+          eval
+          quit
+          "@ | .\build\Release\SniperBishop.exe | Tee-Object -FilePath smoke-test.txt
+
+          if (-not (Select-String -Path smoke-test.txt -Pattern "perft\(4\) = 197281")) {
+            throw "Perft smoke test failed."
+          }
+
+      - name: Prepare package
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force package | Out-Null
+          Copy-Item .\build\Release\SniperBishop.exe package\
+          Copy-Item .\build\Release\firstnet_v3.snnue package\
+          Copy-Item README.md package\
+          Copy-Item LICENSE package\LICENSE.txt
+          Get-FileHash package\SniperBishop.exe -Algorithm SHA256 |
+            ForEach-Object { "$($_.Hash)  SniperBishop.exe" } |
+            Set-Content package\CHECKSUMS.txt
+          Get-FileHash package\firstnet_v3.snnue -Algorithm SHA256 |
+            ForEach-Object { "$($_.Hash)  firstnet_v3.snnue" } |
+            Add-Content package\CHECKSUMS.txt
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: SniperBishop-Windows-x64
+          path: package/

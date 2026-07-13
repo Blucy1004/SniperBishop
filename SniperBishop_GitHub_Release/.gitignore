@@ -1,0 +1,13 @@
+build/
+out/
+results/
+*.exe
+*.obj
+*.pdb
+*.ilk
+*.log
+*.pgn
+*.csv
+__pycache__/
+.vs/
+.vscode/
