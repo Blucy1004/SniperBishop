@@ -4,6 +4,9 @@
 
 The current development release combines a handcrafted classical evaluator with FIRST_NET v3, a 256-hidden-unit efficiently updatable neural evaluator trained from a one-million-position dataset.
 
+**SniperBishop 은신비숍** 은  **Blucy1004** 가 만든 윈도우 C++17 UCI 체스 엔진입니다
+한국산 엔진이며 현재 지속적인 업데이트가 진행 중입니다
+
 > Status: experimental alpha. The hybrid evaluator is the current main line; pure NNUE mode remains available for testing.
 
 ## Highlights
