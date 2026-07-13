@@ -119,9 +119,6 @@ docs/                    Architecture, model and testing notes
 scripts/                 Local build and verification helpers
 ```
 
-## Rating-list testing
-
-See [`docs/CCRL_SUBMISSION.md`](docs/CCRL_SUBMISSION.md) for the release checklist and a ready-to-send testing request.
 
 ## License
 
